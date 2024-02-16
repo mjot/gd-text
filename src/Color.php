@@ -21,10 +21,30 @@ class Color
      */
     public function __construct(int $red = 0, int $green = 0, int $blue = 0, int $alpha = null)
     {
-        $this->red = $red;
-        $this->green = $green;
-        $this->blue = $blue;
-        $this->alpha = $alpha;
+        // Ensure color values are within the correct range
+        $this->red = $this->clamp($red, 0, 255);
+        $this->green = $this->clamp($green, 0, 255);
+        $this->blue = $this->clamp($blue, 0, 255);
+        $this->alpha = $alpha !== null ? $this->clamp($alpha, 0, 127) : null;
+    }
+
+    /**
+     * Ensures a given value falls within the specified range.
+     *
+     * This method takes a value and two boundaries (minimum and maximum) as parameters.
+     * It then returns the value if it's within the range defined by these boundaries.
+     * If the value is outside this range, it returns the nearest boundary value:
+     * - If the value is less than the minimum, it returns the minimum.
+     * - If the value is greater than the maximum, it returns the maximum.
+     *
+     * @param int|float $value The value to be clamped.
+     * @param int|float $min The minimum boundary for the value.
+     * @param int|float $max The maximum boundary for the value.
+     * @return int The clamped value, guaranteed to be between $min and $max (inclusive).
+     */
+    private function clamp($value, $min, $max): int
+    {
+        return max($min, min($max, $value));
     }
 
     /**
